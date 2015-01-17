@@ -1,0 +1,34 @@
+Unify-lang.
+
+All files simply consist of a collection of code type blocks like this:
+{<unifylang blah blah blah >}
+{<name, and >} are delimeters, name choosing a specific parser to use to execute the code.
+
+To define a parser:
+{<interpreter.parser
+  name testparser
+  import interpreter.baserules
+  ruledoer block {<extlangs.lua for i in expression do interpreter.execute(i) end return nil >}
+  ruledoer domath {<extlangs.lua return load(number[1]..op[1]..number[2])() >}
+  rule block block { [<expression>] }
+  rule math domath /<number>/ {{op + - * /}} /<number>/
+  rule expression null /<math>/;
+  rule expression null /<block>/
+>}
+name: names the parser.
+import: loads all the rules and ruledoers from another parser.
+ruledoer: allows you to define a /<function>/ to execute passing the rule arguments to.
+The first argument is the name of the rule doer, the second argument is the actual /<function>/ itself.
+rule: allows you to define a parsing rule.
+The first argument is the name of the rule, for use with /<name>/ and [<name>].
+The second argument is the name of the ruledoer to use to execute the rule.
+The remaining arguments contain the actual rule to match. /<name>/ matches a single instance of a rule, while [<name>] matches one or more instances.
+which can then be used by:
+{<testparser
+  { 
+  1 + 2;
+  2 / 4;
+  {<extlangs.lua print(2 + 4) >}
+  }
+>}
+As you can see here, extlangs.lua exposes the expression rule, and as such can be used instead of a testparser expression. This is a very powerful, yet strange tool.
