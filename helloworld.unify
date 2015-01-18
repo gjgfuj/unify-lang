@@ -1,0 +1,8 @@
+{<interpreter.parser
+  name print
+  ruledoer print {<lua print(string[1]) >}
+  rule statement print p(/<string>/)
+>}
+{<print
+  p("Hello World")
+>}
