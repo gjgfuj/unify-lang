@@ -1,6 +1,6 @@
 {<interpreter.parser
   name print
-  ruledoer print {<lua print(string[1]) >}
+  ruledoer print {<extlangs.lua print(string[1]) >}
   rule statement print p(/<string>/)
 >}
 {<print
